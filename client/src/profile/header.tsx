@@ -9,6 +9,7 @@ interface info{
         follow:number;
         following:number
         posts:number;
+        isFollow:boolean
     }
 }
 class Header extends React.Component<info>{
@@ -22,9 +23,9 @@ class Header extends React.Component<info>{
                         <h2 className='profile_username'>{this.props.content.username}</h2>
                         <h4 className='profile_bio'>{this.props.content.bio}</h4>
                         <h4 className='profile_posts_num'>{this.props.content.posts} Posts</h4>
-                        <h4 className='follow'>followers: {this.props.content.follow}</h4>
-                        <h4 className='following'>following: {this.props.content.following}</h4>
-                        <button className='profile_follow'>follow</button>
+                        <h4 className='follow'>Followers: {this.props.content.follow}</h4>
+                        <h4 className='following'>Following: {this.props.content.following}</h4>
+                        <button className='profile_follow'>{this.props.content.isFollow? 'follow' :'unfollow'}</button>
                     </div>
                 </div>
             </div>
