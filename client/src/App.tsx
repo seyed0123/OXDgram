@@ -3,6 +3,7 @@ import axios from 'axios';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Home from "./home/home";
 import profile from "./profile/profile";
+import Setting from "./setting/setting";
 
 class App extends React.Component {
   state:{data:{hello:string}}={
@@ -26,6 +27,7 @@ class App extends React.Component {
         <Router>
             <Route path="/" exact component={Home} />
             <Route path="/profile" component={profile} />
+            <Route path="/setting" component={Setting}/>
         </Router>
 
     );

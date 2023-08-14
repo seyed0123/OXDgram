@@ -307,3 +307,52 @@ ul li {
 .profile_post_container:hover .profile_post_text {
     opacity: 1;
 }
+.setting_form_container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+}
+.setting_form_content{
+    display: flex;
+    flex-direction: column;
+    background-color: #2A9D8F;
+    margin: 2%;
+    padding: 2%;
+
+    box-shadow: 4px 2px 10px darkslategrey;
+}
+.setting_text{
+
+}
+
+
+.setting_form_container_a{
+    background-color: #E9C46A;
+    margin: 2%;
+    padding: 2%;
+    grid-gap: 5%; /* Adjust the gap between boxes as needed */
+
+    box-shadow: 4px 2px 10px black;
+}
+.center{
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    background-color: #F4A261;
+    margin: 2%;
+    padding: 2%;
+    grid-gap: 5%; /* Adjust the gap between boxes as needed */
+
+    box-shadow: 4px 2px 10px black;
+}
+.center_b{
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    background-color: #E76F51;
+    margin: 2%;
+    padding: 2%;
+}
+#setting_text{
+
+}
