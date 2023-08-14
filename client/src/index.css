@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Dosis');
+@import url('https://fonts.googleapis.com/css?family=Monoton');
 
 body{
     background-color: #264653;
@@ -339,7 +340,7 @@ ul li {
     justify-content: center;
     width: 50%;
     background-color: #F4A261;
-    margin: 2%;
+    margin: 2% auto;
     padding: 2%;
     grid-gap: 5%; /* Adjust the gap between boxes as needed */
 
@@ -350,9 +351,112 @@ ul li {
     justify-content: center;
     width: 50%;
     background-color: #E76F51;
-    margin: 2%;
+    margin: 2% auto;
     padding: 2%;
 }
 #setting_text{
 
+}
+
+.fancy {
+
+    font-family: "Monoton", Helvetica, sans-serif;
+    margin: 2% auto;
+
+    letter-spacing: 5px;
+    font-size: 13vw ;
+    text-transform: uppercase;
+
+    color: transparent;
+    background: linear-gradient(7deg, #F5EE9E 50%, #AB3428 0);
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 0.25px black;
+
+}
+
+
+:root {
+    --color-1: #186cb8;
+    --color-2: #2a9a9f;
+    --color-3: #f1b211;
+    --color-4: #e83611;
+    --color-5: #f9002f;
+}
+
+
+
+.multi_color {
+    font-family: "Exo", sans-serif;
+    font-weight: 900;
+    width: min-content;
+    margin: auto;
+    text-transform: uppercase;
+    background: linear-gradient(219deg,
+    var(--color-1) 19%,
+    transparent 19%,transparent 20%,
+    var(--color-2) 20%, var(--color-2)  39%,
+    transparent 39%,transparent 40%,
+    var(--color-3) 40%,var(--color-3) 59% ,
+    transparent 59%,transparent 60%,
+    var(--color-4) 60%, var(--color-4) 79%,
+    transparent 79%, transparent 80%,
+    var(--color-5) 80%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.container {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+    h1 {
+        font-size: 6.5rem;
+    }
+}
+
+
+
+.butter{
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Chettan+2&family=Calligraffitti&display=swap');
+    font-family: 'Calligraffitti', cursive;
+    font-weight: 700;
+    font-size: 13rem;
+    position: absolute;
+    top: 15%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    letter-spacing: 0.02em;
+    text-align: center;
+    color: #F9f1cc;
+    text-shadow: 5px 5px 0px #FFB650,
+    10px 10px 0px #FFD662,
+    15px 15px 0px  #FF80BF,
+    20px 20px 0px #EF5097,
+    25px 25px 0px #6868AC,
+    30px 30px 0px #90B1E0;
+}
+
+.sign_in{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.sign_in input {
+    width: 80%; /* Adjust this value as needed */
+    margin: 2% auto; /* Centers the element */
+}
+.sign_in button{
+    width: 40%; /* Adjust this value as needed */
+    margin: 2% auto; /* Centers the element */
+}
+.sign_in h2{
+    margin: 2% auto; /* Centers the element */
+}
+.sing_in_wrapper{
+    margin: 20%;
+    background-color: #E9C46A;
+    padding: 4%;
 }
