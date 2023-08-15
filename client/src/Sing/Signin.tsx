@@ -1,6 +1,11 @@
 import React from "react";
-
-class SignIn extends React.Component{
+import { RouteComponentProps } from 'react-router-dom';
+interface Props extends RouteComponentProps {}
+class SignIn extends React.Component<Props>{
+    handleCreateClick = () => {
+        this.props.history.push('/create');
+        window.scrollTo(0, 0);
+    };
     render() {
         return (
             <div className={'sing_in_wrapper'}>
@@ -12,7 +17,7 @@ class SignIn extends React.Component{
                     <button className={'profile_follow'}>login</button>
                     <h2>OR</h2>
                     <div className="container">
-                        <h1 className={'multi_color'}>create account</h1>
+                        <h1 className={'multi_color'} onClick={this.handleCreateClick}>create account</h1>
                     </div>
                 </div>
             </div>

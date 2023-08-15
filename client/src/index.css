@@ -393,23 +393,33 @@ ul li {
     text-transform: uppercase;
     background: linear-gradient(219deg,
     var(--color-1) 19%,
-    transparent 19%,transparent 20%,
-    var(--color-2) 20%, var(--color-2)  39%,
-    transparent 39%,transparent 40%,
-    var(--color-3) 40%,var(--color-3) 59% ,
-    transparent 59%,transparent 60%,
+    transparent 19%, transparent 20%,
+    var(--color-2) 20%, var(--color-2) 39%,
+    transparent 39%, transparent 40%,
+    var(--color-3) 40%, var(--color-3) 59%,
+    transparent 59%, transparent 60%,
     var(--color-4) 60%, var(--color-4) 79%,
     transparent 79%, transparent 80%,
     var(--color-5) 80%);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
+    transition: .25s linear;
 }
+
+.multi_color:hover{
+    transform: scale(1.2);
+    letter-spacing: 20px;
+    cursor: pointer;
+}
+
 
 .container {
     padding: 1.5rem;
     text-align: center;
 }
+
+
 
 @media screen and (min-width: 768px) {
     h1 {
@@ -459,4 +469,8 @@ ul li {
     margin: 20%;
     background-color: #E9C46A;
     padding: 4%;
+}
+
+.create_wrapper{
+     margin: 10%;
 }
