@@ -12,8 +12,12 @@ class SignIn extends React.Component<Props>{
                 <div className={'sign_in'}>
                     <h1 className={'fancy'}>login</h1>
                     <h1 className={'butter'}>OXDgram</h1>
-                    <input type={'text'} placeholder={'username'}/>
-                    <input type={'password'} placeholder={'password'}/>
+                    <div className="style-input">
+                        <input type={'text'} placeholder={'username'}/>
+                    </div>
+                    <div className="style-input">
+                        <input type={'password'} placeholder={'password'}/>
+                    </div>
                     <button className={'profile_follow'}>login</button>
                     <h2>OR</h2>
                     <div className="container">

@@ -11,10 +11,10 @@ class Create extends React.Component<Props>{
             <div className={'sing_in_wrapper create_wrapper'}>
                 <div className={'sign_in'}>
                     <h1 className={'fancy'}>Create</h1>
-                    <input type={'text'} placeholder={'username'}/>
-                    <input type={'password'} placeholder={'password'}/>
-                    <input type={'password'} placeholder={'confirm password'}/>
-                    <input type={'email'} placeholder={'email'}/>
+                    <input className={'input'} type={'text'} placeholder={'username'}/>
+                    <input className={'input'} type={'password'} placeholder={'password'}/>
+                    <input className={'input'} type={'password'} placeholder={'confirm password'}/>
+                    <input className={'input'} type={'email'} placeholder={'email'}/>
                     <button className={'profile_follow'}>Create</button>
                     <h2>OR</h2>
                     <div className="container">

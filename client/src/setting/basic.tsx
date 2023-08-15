@@ -25,27 +25,27 @@ class Basic extends React.Component<info>{
                 <div className={'setting_form_container'}>
                     <div className='setting_form_content'>
                         <p className='setting_text'>Username: {this.state.content.username}</p>
-                        <input className='setting_input' type='text' value={this.state.content.username}/>
+                        <input className='setting_input input' type='text' value={this.state.content.username}/>
                     </div>
                     <div className='setting_form_content'>
                         <p className='setting_text'>Name: {this.state.content.name}</p>
-                        <input className='setting_input' type='text' value={this.state.content.name}/>
+                        <input className='setting_input input' type='text' value={this.state.content.name}/>
                     </div>
                     <div className='setting_form_content'>
                         <p className='setting_text'>Email: {this.state.content.email}</p>
-                        <input className='setting_input' type='email' value={this.state.content.email}/>
+                        <input className='setting_input input' type='email' value={this.state.content.email}/>
                     </div>
                     <div className='setting_form_content'>
                         <p className='setting_text'>Can Comment:</p>
-                        <input className='setting_input' type='checkbox' defaultChecked={this.state.content.canComment}/>
+                        <input className='setting_input check' type='checkbox' defaultChecked={this.state.content.canComment}/>
                     </div>
                     <div className='setting_form_content'>
                         <p className='setting_text'>Can Follow: </p>
-                        <input className='setting_input' type='checkbox' defaultChecked={this.state.content.canFollow}/>
+                        <input className='setting_input check' type='checkbox' defaultChecked={this.state.content.canFollow}/>
                     </div>
                     <div className='setting_form_content'>
                         <p className='setting_text'>Can Search: </p>
-                        <input className='setting_input' type='checkbox' defaultChecked={this.state.content.canSearch}/>
+                        <input className='setting_input check' type='checkbox' defaultChecked={this.state.content.canSearch}/>
                     </div>
                 </div>
                 <button className="center_b profile_follow" >submit</button>
