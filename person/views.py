@@ -1,4 +1,5 @@
 # views.py
+import json
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -10,16 +11,16 @@ from .models import person
 @method_decorator(csrf_exempt, name='dispatch')
 class Create(View):
     def post(self, request, *args, **kwargs):
-        data = request.POST
+        data = json.loads(request.body.decode('utf-8'))
         username = data.get('username')
         password = data.get('password')
         email = data.get('email')
 
         if person.objects.filter(username=username).exists():
-            return JsonResponse({'error': 'Username already exists'}, status=400)
+            return JsonResponse({'message': 'Username already exists'})
 
         if person.objects.filter(email=email).exists():
-            return JsonResponse({'error': 'Email already exists'}, status=400)
+            return JsonResponse({'message': 'Email already exists'})
 
         hashed_password = make_password(password)
 
@@ -37,4 +38,4 @@ class Create(View):
         return JsonResponse({'message': 'Data saved successfully'})
 
     def get(self, request, *args, **kwargs):
-        return JsonResponse({'error': 'Invalid request'}, status=400)
+        return JsonResponse({'message': 'Invalid request'})
