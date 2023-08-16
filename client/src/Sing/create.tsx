@@ -1,7 +1,44 @@
 import React from "react";
 import { RouteComponentProps } from 'react-router-dom';
+import axios from "axios";
 interface Props extends RouteComponentProps {}
 class Create extends React.Component<Props>{
+    state = {
+        username: '',
+        password: '',
+        confirmPassword: '',
+        email: '',
+    };
+    constructor(props:any) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event:any) {
+        this.setState({[event.target.name]: event.target.value});
+    }
+
+    handleSubmit(event:any) {
+        event.preventDefault();
+
+        if (this.state.password !== this.state.confirmPassword) {
+            alert('Password and confirm password do not match');
+            return;
+        }
+
+        axios.post('http://localhost:8000/person/create', this.state)
+            .then(response => {
+                console.log(response.data);
+                alert(response.data.message)
+                if(response.data.message==='Data saved successfully'){
+                    this.handleLoginClick();
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
     handleLoginClick = () => {
         this.props.history.push('/login');
         window.scrollTo(0, 0);
@@ -11,11 +48,14 @@ class Create extends React.Component<Props>{
             <div className={'sing_in_wrapper create_wrapper'}>
                 <div className={'sign_in'}>
                     <h1 className={'fancy'}>Create</h1>
-                    <input className={'input'} type={'text'} placeholder={'username'}/>
-                    <input className={'input'} type={'password'} placeholder={'password'}/>
-                    <input className={'input'} type={'password'} placeholder={'confirm password'}/>
-                    <input className={'input'} type={'email'} placeholder={'email'}/>
-                    <button className={'profile_follow'}>Create</button>
+                    <form onSubmit={this.handleSubmit} className={'sign_in'}>
+                        <input className={'input'} type={'text'} name="username" placeholder={'username'} onChange={this.handleChange} />
+                        <input className={'input'} type={'password'} name="password" placeholder={'password'} onChange={this.handleChange} />
+                        <input className={'input'} type={'password'} name="confirmPassword" placeholder={'confirm password'} onChange={this.handleChange} />
+                        <input className={'input'} type={'email'} name="email" placeholder={'email'} onChange={this.handleChange} />
+                        <button type="submit" className={'profile_follow'}>Submit</button>
+                    </form>
+
                     <h2>OR</h2>
                     <div className="container">
                         <h1 className={'multi_color'} onClick={this.handleLoginClick}>Login</h1>
