@@ -1,9 +1,10 @@
 # views.py
 import json
 from django.contrib.auth.hashers import make_password
+from django.forms import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.views import View
 from .models import person
 
@@ -32,10 +33,52 @@ class Create(View):
             can_follow=False,
             can_search=False,
             can_comment=False,
-            # Set other fields as necessary
         )
         person_.save()
         return JsonResponse({'message': 'Data saved successfully'})
 
     def get(self, request, *args, **kwargs):
         return JsonResponse({'message': 'Invalid request'})
+
+
+class setting(View):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body.decode('utf-8'))
+        _id = data.get('id')
+        username = data.get('username')
+        email = data.get('email')
+        name = data.get('name')
+        can_comment = data.get('can_comment')
+        can_follow = data.get('can_follow')
+        can_search = data.get('can_search')
+
+        if person.objects.filter(username=username).exists():
+            return JsonResponse({'message': 'Username already exists'})
+
+        if person.objects.filter(email=email).exists():
+            return JsonResponse({'message': 'Email already exists'})
+
+        _person = person.objects.get(id=_id)
+
+        _person.username = username
+        _person.name = name
+        _person.email = email
+        _person.can_follow = can_follow
+        _person.can_search = can_search
+        _person.can_comment = can_comment
+
+        _person.save()
+        return JsonResponse({'message': 'Data saved successfully'})
+
+    def get(self, request, *args, **kwargs):
+        person_id = kwargs.get('person_id')
+        try:
+            data_obj = person.objects.get(id=person_id)
+            data_dict = model_to_dict(data_obj)
+
+            data_dict['profile_img'] = str(data_dict['profile_img'])
+
+            return JsonResponse(data_dict)
+        except person.DoesNotExist:
+
+            return HttpResponseBadRequest("Person with the given ID does not exist")
