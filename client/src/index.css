@@ -346,6 +346,12 @@ ul li {
 
     box-shadow: 4px 2px 10px black;
 }
+#setting_profile{
+    width: 15%;
+    padding: 0;
+    box-shadow: 4px 2px 10px black,2px 4px 10px black;
+}
+
 .center_b{
     display: flex;
     justify-content: center;
@@ -539,3 +545,66 @@ style-input input::-webkit-input-placeholder {
      color:  #7881A1;
 }
 
+:root {
+    --hue: 223;
+    --bg: hsl(var(--hue),90%,95%);
+    --fg: hsl(var(--hue),90%,5%);
+    --trans-dur: 0.3s;
+    font-size: calc(16px + (24 - 16) * (100vw - 320px) / (1280 - 320));
+}
+.ip {
+    padding: 1.5em 0;
+    width: 16em;
+    height: 8em;
+}
+.ip__track {
+    stroke: hsl(var(--hue),90%,90%);
+    transition: stroke var(--trans-dur);
+}
+.ip__worm1,
+.ip__worm2 {
+    animation: worm1 2s linear infinite;
+}
+.ip__worm2 {
+    animation-name: worm2;
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: hsl(var(--hue),90%,5%);
+        --fg: hsl(var(--hue),90%,95%);
+    }
+    .ip__track {
+        stroke: hsl(var(--hue),90%,15%);
+    }
+}
+
+/* Animation */
+@keyframes worm1 {
+    from {
+        stroke-dashoffset: 0;
+    }
+    50% {
+        animation-timing-function: steps(1);
+        stroke-dashoffset: -358;
+    }
+    50.01% {
+        animation-timing-function: linear;
+        stroke-dashoffset: 358;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes worm2 {
+    from {
+        stroke-dashoffset: 358;
+    }
+    50% {
+        stroke-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: -358;
+    }
+}
