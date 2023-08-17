@@ -41,6 +41,7 @@ class Create(View):
         return JsonResponse({'message': 'Invalid request'})
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class setting(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body.decode('utf-8'))
@@ -82,3 +83,19 @@ class setting(View):
         except person.DoesNotExist:
 
             return HttpResponseBadRequest("Person with the given ID does not exist")
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class profile(View):
+    def post(self, request, *args, **kwargs):
+        user_id = request.POST.get('user_id')
+        profile_img = request.FILES.get('profile_img')
+
+        # Save the image and update the user profile
+        user_profile = person.objects.get(id=user_id)
+        user_profile.profile_img = profile_img
+        user_profile.save()
+
+        return JsonResponse({'message': 'Image uploaded successfully'})
+
+
