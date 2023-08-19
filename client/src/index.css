@@ -346,8 +346,12 @@ ul li {
 
     box-shadow: 4px 2px 10px black;
 }
-#setting_profile{
+.setting_profile{
     width: 15%;
+    padding: 0;
+    box-shadow: 4px 2px 10px black,2px 4px 10px black;
+}
+.setting_banner{
     padding: 0;
     box-shadow: 4px 2px 10px black,2px 4px 10px black;
 }

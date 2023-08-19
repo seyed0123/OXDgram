@@ -17,6 +17,7 @@ class Basic extends React.Component<info>{
         password:'',
         confirmPassword: '',
         oldPassword:'',
+        banner_img:'',
         loading:true,
     }
     profile:any = '';
@@ -24,7 +25,8 @@ class Basic extends React.Component<info>{
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.sendImg = this.sendImg.bind(this);
+        this.sendBanner = this.sendBanner.bind(this);
+        this.sendProfile = this.sendProfile.bind(this);
     }
 
     componentDidMount() {
@@ -43,6 +45,7 @@ class Basic extends React.Component<info>{
                     canFollow: userData.can_follow,
                     canComment: userData.can_comment,
                     profile_img: 'http://localhost:8000/media/'+userData.profile_img,
+                    banner_img: 'http://localhost:8000/media/'+userData.banner_img,
                     loading :false
                 });
             })
@@ -62,7 +65,6 @@ class Basic extends React.Component<info>{
         let url :string= 'http://localhost:8000/person/setting/'+this.props.id+'/'
         axios.post(url, this.state)
             .then(response => {
-                console.log(response.data);
                 alert(response.data.message)
                 if(response.data.message==='Data saved successfully'){
                     this.componentDidMount()
@@ -72,7 +74,7 @@ class Basic extends React.Component<info>{
                 console.error(error);
             });
     }
-    sendImg(event:any){
+    sendProfile(event:any){
         event.preventDefault();
 
 
@@ -83,7 +85,23 @@ class Basic extends React.Component<info>{
         console.log(event.target.files[0])
         axios.post('http://localhost:8000/person/profile', formData)
             .then((response) => {
-                console.log(response.data);
+                alert(response.data.message);
+                this.componentDidMount()
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+    sendBanner(event:any){
+        event.preventDefault();
+
+
+        const formData = new FormData();
+        formData.append('user_id', String(this.state.id));
+        formData.append('banner_img', event.target.files[0]);
+
+        axios.post('http://localhost:8000/person/banner', formData)
+            .then((response) => {
                 alert(response.data.message);
                 this.componentDidMount()
             })
@@ -139,7 +157,7 @@ class Basic extends React.Component<info>{
                         Basics
                     </h3>
                 </div>
-                <img id='setting_profile' src={this.state.profile_img} className={'center profile_img '} width='5%'/>
+                <img  src={this.state.profile_img} className={'center profile_img setting_profile'} width='5%'/>
                 <div className={'setting_form_container'}>
                     <div className='setting_form_content'>
                         <p className='setting_text'>Username: {this.state.username}</p>
@@ -171,7 +189,7 @@ class Basic extends React.Component<info>{
                     </div>
                     <div className='setting_form_content'>
                         <p className='setting_text'>profile: </p>
-                        <input className='setting_input input' type='file' accept=".jpg,.jpeg,.png" onChange={this.sendImg}/>
+                        <input className='setting_input input' type='file' accept=".jpg,.jpeg,.png" onChange={this.sendProfile}/>
                     </div>
                     <div className='setting_form_content'>
                         <p className='setting_text'>password: </p>
@@ -179,6 +197,11 @@ class Basic extends React.Component<info>{
                         <input className={'input'} type={'password'} name="password" placeholder={'password'} onChange={this.handleChange} />
                         <input className={'input'} type={'password'} name="confirmPassword" placeholder={'confirm password'} onChange={this.handleChange} />
                     </div>
+                </div>
+                <div className='setting_form_content'>
+                    <p className='setting_text'>banner: </p>
+                    <img className='center setting_banner' src={this.state.banner_img}/>
+                    <input className='setting_input input' type='file' accept=".jpg,.jpeg,.png" onChange={this.sendBanner}/>
                 </div>
                 <button className="center_b profile_follow" onClick={this.handleSubmit}>submit</button>
             </div>

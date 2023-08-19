@@ -12,7 +12,7 @@ class Setting extends React.Component{
                     </h1>
                 </div>
                 <Basic id={4}/>
-                <PostAdd/>
+                <PostAdd id={4}/>
                 <button className="center_b profile_follow" >Logout</button>
             </div>
         );
