@@ -1,5 +1,6 @@
 # views.py
 import json
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.hashers import make_password
 from django.forms import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
@@ -49,17 +50,26 @@ class setting(View):
         username = data.get('username')
         email = data.get('email')
         name = data.get('name')
-        can_comment = data.get('can_comment')
-        can_follow = data.get('can_follow')
-        can_search = data.get('can_search')
+        bio = data.get('boi')
+        can_comment = bool(data.get('can_comment'))
+        can_follow = bool(data.get('can_follow'))
+        can_search = bool(data.get('can_search'))
+        old_password = data.get('old_password')
+        password = data.get('password')
 
-        if person.objects.filter(username=username).exists():
+        user = person.objects.get(id=_id)
+        _person = person.objects.get(id=_id)
+        if (username != user.username) and (person.objects.filter(username=username).exists()):
             return JsonResponse({'message': 'Username already exists'})
 
-        if person.objects.filter(email=email).exists():
+        if (email != user.email) and person.objects.filter(email=email).exists():
             return JsonResponse({'message': 'Email already exists'})
 
-        _person = person.objects.get(id=_id)
+        if (old_password != None) and check_password(old_password , user.password):
+            return JsonResponse({'message': 'old password in wrong'})
+        elif old_password!=None:
+            _person.password = make_password(password)
+
 
         _person.username = username
         _person.name = name
@@ -67,6 +77,8 @@ class setting(View):
         _person.can_follow = can_follow
         _person.can_search = can_search
         _person.can_comment = can_comment
+        _person.boi = bio
+
 
         _person.save()
         return JsonResponse({'message': 'Data saved successfully'})
@@ -78,6 +90,7 @@ class setting(View):
             data_dict = model_to_dict(data_obj)
 
             data_dict['profile_img'] = str(data_dict['profile_img'])
+            data_dict['banner_img'] = str(data_dict['banner_img'])
 
             return JsonResponse(data_dict)
         except person.DoesNotExist:
@@ -99,3 +112,15 @@ class profile(View):
         return JsonResponse({'message': 'Image uploaded successfully'})
 
 
+@method_decorator(csrf_exempt, name='dispatch')
+class banner(View):
+    def post(self, request, *args, **kwargs):
+        user_id = request.POST.get('user_id')
+        banner_img = request.FILES.get('banner_img')
+
+        # Save the image and update the user profile
+        user_profile = person.objects.get(id=user_id)
+        user_profile.banner_img = banner_img
+        user_profile.save()
+
+        return JsonResponse({'message': 'Image uploaded successfully'})
