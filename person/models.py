@@ -13,3 +13,11 @@ class person(models.Model):
     can_follow = models.BooleanField()
     can_comment = models.BooleanField()
     can_search = models.BooleanField()
+    last_login = models.DateTimeField('last login', null=True, blank=True)
+
+    # Add the new fields
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+
+    # Specify the username field
+    USERNAME_FIELD = 'username'

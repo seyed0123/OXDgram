@@ -1,7 +1,10 @@
 # views.py
 import json
+
+from django.contrib import auth
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
 from django.forms import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -9,6 +12,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.views import View
 from .models import person
 
+ID = 0
 
 @method_decorator(csrf_exempt, name='dispatch')
 class Create(View):
@@ -65,11 +69,11 @@ class setting(View):
         if (email != user.email) and person.objects.filter(email=email).exists():
             return JsonResponse({'message': 'Email already exists'})
 
-        if (old_password != None) and check_password(old_password , user.password):
+        if (old_password is not None) and not check_password(old_password, user.password):
             return JsonResponse({'message': 'old password in wrong'})
-        elif old_password!=None:
-            _person.password = make_password(password)
 
+        elif old_password is not None:
+            _person.password = make_password(password)
 
         _person.username = username
         _person.name = name
@@ -78,7 +82,6 @@ class setting(View):
         _person.can_search = can_search
         _person.can_comment = can_comment
         _person.boi = bio
-
 
         _person.save()
         return JsonResponse({'message': 'Data saved successfully'})
@@ -95,7 +98,7 @@ class setting(View):
             return JsonResponse(data_dict)
         except person.DoesNotExist:
 
-            return HttpResponseBadRequest("Person with the given ID does not exist")
+            return JsonResponse({'message': "Person with the given ID does not exist"})
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -124,3 +127,40 @@ class banner(View):
         user_profile.save()
 
         return JsonResponse({'message': 'Image uploaded successfully'})
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class login(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            username = data.get('username')
+
+            if not (person.objects.filter(username=username).exists()):
+                return JsonResponse({'message': 'Username is not correct'})
+
+            user = person.objects.get(username=username)
+            old_password = data.get('password')
+
+            if not check_password(old_password, user.password):
+                return JsonResponse({'message': 'password in wrong'})
+
+            global ID
+            ID = user.id
+            return JsonResponse({'id': ID})
+
+        except:
+            return JsonResponse({'id': 0})
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class logout(View):
+    def post(self, request, *args, **kwargs):
+        global ID
+        ID = 0
+        return JsonResponse({'message': 'logout'})
+
+class check(View):
+    def get(self, request, *args, **kwargs):
+        global ID
+        return JsonResponse({'id': ID})

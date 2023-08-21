@@ -23,7 +23,7 @@ class info(View):
             return JsonResponse(data_dict)
         except post.DoesNotExist:
 
-            return HttpResponseBadRequest("Person with the given ID does not exist")
+            return HttpResponseBadRequest("Post with the given ID does not exist")
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -33,12 +33,28 @@ class new(View):
         img = request.FILES.get('img')
         text = request.POST.get('text')
 
-        _person = person.objects.get(id=user_id)
-
-        print(_person.username)
-        name = _person.username
-
-        post_obj = post(owner=name, img=img, text=text)
+        post_obj = post(owner=user_id, img=img, text=text)
         post_obj.save()
 
         return JsonResponse({'message': 'Image uploaded successfully'})
+
+@method_decorator(csrf_exempt, name='dispatch')
+class user_post(View):
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        try:
+            data_objects = post.objects.filter(owner=user_id)
+
+            if data_objects:
+                data_list = []
+                for data_obj in data_objects:
+                    data_dict = model_to_dict(data_obj)
+                    data_dict['img'] = str(data_dict['img'])
+                    data_list.append(data_dict)
+                return JsonResponse(data_list, safe=False)
+            else:
+                # Handle the case when no post is found for the given owner
+                return JsonResponse({'message': "No posts found for the owner."})
+        except person.DoesNotExist:
+
+            return JsonResponse({'message': "Person with the given ID does not exist"})
