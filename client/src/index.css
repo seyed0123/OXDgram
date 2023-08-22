@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Dosis');
 @import url('https://fonts.googleapis.com/css?family=Monoton');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@700&display=swap');
 
 body{
     background-color: #264653;
@@ -9,6 +11,7 @@ body{
     color: #F4A261;
     color: #E76F51;
     color: black;
+    font-family: 'Inconsolata', monospace;
 
 }
 
@@ -36,6 +39,21 @@ body{
 .profile_img:hover{
     transform: scale(1.1);
 }
+.img-rounded{
+    position: absolute;
+    right : 20px;
+    width: 10%;
+}
+.parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img_post {
+    width: 80%;
+}
+
 .buttons{
     align-items: center;
     appearance: none;
@@ -107,18 +125,26 @@ body{
     position: relative;
 }
 .profile_post{
-    position: absolute;
-    top: 1%;
-    right: 1%;
-    width: 5%;
+
+    width: 10%;
     z-index: 1;
 }
 .name_post{
-    font-size: xx-large;
     font-weight: bold;
     font-family: Broadway, serif;
-    text-shadow: 0 0 5px white;
+
     z-index: 1;
+}
+.home_post_content{
+    display: flex;
+    justify-content: left;
+    gap: 5%;
+}
+.content_post{
+
+    font-family: 'Raleway', sans-serif;
+    z-index: 1;
+
 }
 .img_fullscreen {
     width: 100%;

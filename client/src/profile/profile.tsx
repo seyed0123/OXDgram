@@ -46,7 +46,7 @@ class Profile extends React.Component<RouteComponentProps<MatchParams>>{
     render() {
         return (
             <div >
-                <Header id={Number(this.state.id)} content={{prof:require('./img1.jpg'),banner:require('./back.jpg') , bio:'this is a bio' ,username:'username',follow:0,following:0,posts:0,isFollow:true}}/>
+                <Header id={Number(this.state.id)} num_post={this.state.content.length}content={{prof:require('./img1.jpg'),banner:require('./back.jpg') , bio:'this is a bio' ,username:'username',follow:0,following:0,posts:0,isFollow:true}}/>
                 {this.state.loading ? <div className="book center">
                     <div className="book__pg-shadow"></div>
                     <div className="book__pg"></div>

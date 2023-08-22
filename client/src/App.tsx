@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Home from "./home/home";
-import profile from "./profile/profile";
+import Profile from "./profile/profile";
 import Setting from "./setting/setting";
 import SignIn from "./Sing/Signin";
 import Create from "./Sing/create";
@@ -39,11 +39,11 @@ class App extends React.Component {
                 <Route render={(props) => <SignIn {...props}  />}/>
             </Router>:
         <Router>
-            <Route path="/" exact component={Home} />
-            <Route path="/profile/:id" component={profile} />
-            <Route path="/setting" component={Setting}/>
+            <Route path="/" exact  render={(props) => <Home {...props} id={this.state.id}/> }/>
+            <Route path="/profile/:id"  render={(props) => <Profile {...props} />}/>
+            <Route path="/setting"  render={(props) => <Setting {...props} id={this.state.id} />}/>
             <Route path="/login" render={(props) => <SignIn {...props}  />}/>
-            <Route path="/create" component={Create}/>
+            <Route path="/create"  render={(props) => <Create {...props}  />}/>
         </Router>
 
     );

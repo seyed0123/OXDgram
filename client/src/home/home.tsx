@@ -5,34 +5,57 @@ import Header from "./header";
 import Recom from "./recom";
 import Posts from "./post";
 
-interface Props extends RouteComponentProps {}
+interface Props extends RouteComponentProps {
+    id:number
+}
 class Home extends React.Component<Props>
 {
-    state:{data:{hello:string}}={
-        data:{hello:'seyed'}
+    state={
+        username :'',
+        profile:'',
+        loading:true,
+        num:5,
+        id:0,
+        text:'Recommendation'
     }
 
-    handleProfileButtonClick = () => {
-        this.props.history.push('/profile');
-    };
-    // componentDidMount() {
-    // axios.get('http://localhost:8000/api/hello')
-    //     .then((response: { data: any; }) => {
-    //         this.setState({
-    //             data: response.data
-    //         });
-    //     });
-    // }
+    constructor(props:Props) {
+        super(props);
+        this.load = this.load.bind(this)
+    }
+
+    componentDidMount() {
+        let url :string= 'http://localhost:8000/person/setting/'+this.props.id+'/'
+        axios.get(url)
+            .then(response => {
+                const userData = response.data;
+                this.setState({
+                    id:userData.id,
+                    username: userData.username,
+                    profile: 'http://localhost:8000/media/'+userData.profile_img,
+                    loading :false
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    load(){
+        this.setState((prevState:{num:number}) => ({
+            num: prevState.num + 5
+        }))
+    }
+
     render(){
         return(
             <div>
-                <Header content={{path:require('./img1.jpg')}} />
+                <Header content={{path:this.state.profile ,username:this.state.username , id:this.state.id}} />
                 <div className='container_body'>
-                    <Recom/>
-                    <Posts/>
+                    <Recom id={this.state.id} text={this.state.text}/>
+                    <Posts num={this.state.num}/>
                 </div>
                 <div style={{justifyContent:'center' , display:'flex'}}>
-                    <button type={'submit'}>Load more</button>
+                    <button className={'profile_follow'} onClick={this.load}>Load more</button>
                 </div>
             </div>
         )

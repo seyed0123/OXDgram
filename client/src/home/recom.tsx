@@ -1,17 +1,27 @@
 import React from "react";
+import axios from "axios";
 interface person{
     content:{
         img:string
         username:string
+        id_user:number
+        id:number
     }
 }
-class Recom extends React.Component{
+
+interface info {
+    id:number;
+    text:string
+}
+class Recom extends React.Component<info>{
+    constructor(props:any) {
+        super(props);
+
+    }
     render() {
         return (
             <div className='right-grid' id='right_grid'>
-                <h2>Recommendations</h2>
-                <Person content={{img:require('./img1.jpg'),username:'seyed'}}/>
-                <Person content={{img:require('./img1.jpg'),username:'seyed'}}/>
+                <h2>{this.props.text}</h2>
             </div>
         );
     }

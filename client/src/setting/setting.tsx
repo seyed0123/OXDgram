@@ -2,8 +2,11 @@ import React from "react";
 import Basic from "./basic";
 import PostAdd from "./postAdd";
 import axios from "axios";
-
-class Setting extends React.Component{
+import {RouteComponentProps} from "react-router-dom";
+interface Props extends RouteComponentProps {
+    id:number
+}
+class Setting extends React.Component<Props>{
     logout(){
         let url :string= 'http://localhost:8000/person/logout/'
         axios.post(url)
@@ -16,8 +19,8 @@ class Setting extends React.Component{
                         Setting
                     </h1>
                 </div>
-                <Basic id={4}/>
-                <PostAdd id={4}/>
+                <Basic id={this.props.id}/>
+                <PostAdd id={this.props.id}/>
                 <button className="center_b profile_follow" onClick={this.logout}>Logout</button>
             </div>
         );

@@ -13,10 +13,11 @@ interface info{
         isFollow:boolean
     }
     id:number;
+    num_post:number;
 }
 class Header extends React.Component<info>{
     state={
-        id:0,
+        id:this.props.id,
         username:'',
         name:'',
         email:'',
@@ -25,13 +26,13 @@ class Header extends React.Component<info>{
         following:0,
         profile:'',
         banner:'',
-        posts:0,
-        isFollow:0,
+        isFollow:1,
         loading:true,
     }
     constructor(props:any) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.follow = this.follow.bind(this);
     }
     handleSubmit(event:any){
 
@@ -49,11 +50,29 @@ class Header extends React.Component<info>{
                     bio: userData.boi,
                     profile: 'http://localhost:8000/media/'+userData.profile_img,
                     banner: 'http://localhost:8000/media/'+userData.banner_img,
+                    follow: userData.follower_num,
+                    following:userData.following_num,
+                    isFollow:userData.following? 1 : 0 ,
                     loading :false
                 });
             })
             .catch(error => {
                 console.error('Error:', error);
+            });
+    }
+    follow(event:any){
+        event.preventDefault();
+        let form = {
+            user:this.state.id,
+        }
+        axios.post('http://localhost:8000/person/follow/', form)
+            .then(response => {
+                if (response.data.message !== undefined)
+                    alert(response.data.message)
+                    window.location.reload()
+            })
+            .catch(error => {
+                console.error(error);
             });
     }
     render() {
@@ -66,12 +85,12 @@ class Header extends React.Component<info>{
                         <h2 className='profile_username'>{this.state.username}</h2>
                         <div className='profile_content_wrapper_inner'>
                             <h5 className='profile_bio'>I am {this.state.name},{this.state.bio}</h5>
-                            <h4 className='profile_posts_num'>{this.state.posts} Posts</h4>
+                            <h4 className='profile_posts_num'>{this.props.num_post} Posts</h4>
                             <h4 className='follow'>Followers: {this.state.follow}</h4>
                             <h4 className='following'>Following: {this.state.following}</h4>
                         </div>
-                        <button className='profile_follow'>{this.state.isFollow? 'follow' :'unfollow'}</button>
-                </div>
+                        <button className='profile_follow' onClick={this.follow}>{!this.state.isFollow? 'follow' :'unfollow'}</button>
+                    </div>
                 </div>
             </div>
 
