@@ -21,3 +21,11 @@ class person(models.Model):
 
     # Specify the username field
     USERNAME_FIELD = 'username'
+
+
+class Follower(models.Model):
+    follower = models.CharField(max_length=100)
+    user = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.user

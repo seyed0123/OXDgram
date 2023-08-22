@@ -6,6 +6,7 @@ from .views import banner
 from .views import login
 from .views import logout
 from .views import check
+from .views import follow
 
 urlpatterns = [
     path('create/', Create.as_view(), name='create'),
@@ -14,5 +15,6 @@ urlpatterns = [
     path('banner', banner.as_view(), name='banner'),
     path('login', login.as_view(), name='login'),
     path('logout/', logout.as_view(), name='logout'),
-    path('check/', check.as_view(), name='check')
+    path('check/', check.as_view(), name='check'),
+    path('follow/', follow.as_view(), name='follow')
 ]

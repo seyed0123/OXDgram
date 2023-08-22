@@ -10,9 +10,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views import View
-from .models import person
+from .models import person , Follower
 
 ID = 0
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class Create(View):
@@ -94,7 +95,15 @@ class setting(View):
 
             data_dict['profile_img'] = str(data_dict['profile_img'])
             data_dict['banner_img'] = str(data_dict['banner_img'])
+            num = Follower.objects.filter(follower=ID, user=person_id).count()
+            if Follower.objects.filter(follower=ID, user=person_id).count() == 1:
+                data_dict['following'] = True
+            else:
+                data_dict['following'] = False
 
+            data_dict['follower_num'] = Follower.objects.filter(user=person_id).count()
+
+            data_dict['following_num'] = Follower.objects.filter(follower=person_id).count()
             return JsonResponse(data_dict)
         except person.DoesNotExist:
 
@@ -160,7 +169,26 @@ class logout(View):
         ID = 0
         return JsonResponse({'message': 'logout'})
 
+
 class check(View):
     def get(self, request, *args, **kwargs):
         global ID
         return JsonResponse({'id': ID})
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class follow(View):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body.decode('utf-8'))
+        global ID
+        follower = ID
+        user = data['user']
+        if Follower.objects.filter(follower=follower, user=user).first():
+            delete_follower = Follower.objects.get(follower=follower, user=user)
+            delete_follower.delete()
+            return JsonResponse({'message': 'Unfollowed'})
+        else:
+            new_follower = Follower.objects.create(follower=follower , user=user)
+            new_follower.save()
+            return JsonResponse({'message': 'followed'})
+

@@ -1,3 +1,4 @@
+import random
 from django.forms import model_to_dict
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render
@@ -32,11 +33,12 @@ class new(View):
         user_id = request.POST.get('user_id')
         img = request.FILES.get('img')
         text = request.POST.get('text')
+        if img is not None:
+            post_obj = post(owner=user_id, img=img, text=text)
+            post_obj.save()
+            return JsonResponse({'message': 'Image uploaded successfully'})
 
-        post_obj = post(owner=user_id, img=img, text=text)
-        post_obj.save()
-
-        return JsonResponse({'message': 'Image uploaded successfully'})
+        return JsonResponse({'message': 'Image was null'})
 
 @method_decorator(csrf_exempt, name='dispatch')
 class user_post(View):
@@ -58,3 +60,25 @@ class user_post(View):
         except person.DoesNotExist:
 
             return JsonResponse({'message': "Person with the given ID does not exist"})
+
+class home_post(View):
+    def get(self, request, *args, **kwargs):
+            data_objects = post.objects.all()
+
+            if data_objects:
+                data_list = []
+                for data_obj in data_objects:
+                    data_dict = model_to_dict(data_obj)
+
+                    user = person.objects.get(id=data_obj.owner)
+                    data_dict['img'] = str(data_dict['img'])
+                    data_dict['owner_id'] = user.id
+                    data_dict['owner_username'] = user.username
+                    data_dict['profile'] = str(user.profile_img)
+                    data_list.append(data_dict)
+
+                random.shuffle(data_list)
+                return JsonResponse(data_list, safe=False)
+            else:
+                # Handle the case when no post is found for the given owner
+                return JsonResponse({'message': "No posts found."})
