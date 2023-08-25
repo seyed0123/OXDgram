@@ -1,18 +1,25 @@
 # views.py
+import datetime
 import json
+import random
+import uuid
 
-from django.contrib import auth
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User, auth
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User
 from django.forms import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views import View
-from .models import person , Follower
+from .models import person, Follower
 
-ID = 0
+IDs = {}
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -31,15 +38,8 @@ class Create(View):
 
         hashed_password = make_password(password)
 
-        person_ = person(
-            username=username,
-            password=hashed_password,
-            email=email,
-            boi='',
-            can_follow=False,
-            can_search=False,
-            can_comment=False,
-        )
+        person_ = person.objects.create(username=username, email=email, password=hashed_password, boi='', can_follow=True,
+                                        can_search=True)
         person_.save()
         return JsonResponse({'message': 'Data saved successfully'})
 
@@ -95,12 +95,6 @@ class setting(View):
 
             data_dict['profile_img'] = str(data_dict['profile_img'])
             data_dict['banner_img'] = str(data_dict['banner_img'])
-            num = Follower.objects.filter(follower=ID, user=person_id).count()
-            if Follower.objects.filter(follower=ID, user=person_id).count() == 1:
-                data_dict['following'] = True
-            else:
-                data_dict['following'] = False
-
             data_dict['follower_num'] = Follower.objects.filter(user=person_id).count()
 
             data_dict['following_num'] = Follower.objects.filter(follower=person_id).count()
@@ -108,6 +102,23 @@ class setting(View):
         except person.DoesNotExist:
 
             return JsonResponse({'message': "Person with the given ID does not exist"})
+
+@method_decorator(csrf_exempt, name='dispatch')
+class is_follow(View):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body.decode('utf-8'))
+        person_id = data['person_id']
+        token = data['token']
+
+        global IDs
+        username = IDs.get(token, 0)[0]
+        user_id = person.objects.get(username=username).id
+        data_dict = {}
+        if Follower.objects.filter(follower=user_id, user=person_id).count() == 1:
+            data_dict['following'] = True
+        else:
+            data_dict['following'] = False
+        return JsonResponse(data_dict)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -144,51 +155,110 @@ class login(View):
         try:
             data = json.loads(request.body.decode('utf-8'))
             username = data.get('username')
+            password = data.get('password')
 
-            if not (person.objects.filter(username=username).exists()):
-                return JsonResponse({'message': 'Username is not correct'})
+            if person.objects.filter(username=username).count() != 1:
+                return JsonResponse({'message': "login failed"})
+            elif not check_password(password, person.objects.get(username=username).password):
+                return JsonResponse({'message': "login failed"})
 
-            user = person.objects.get(username=username)
-            old_password = data.get('password')
+            global IDs
 
-            if not check_password(old_password, user.password):
-                return JsonResponse({'message': 'password in wrong'})
+            token = str(uuid.uuid4())
+            timestamp = datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+            IDs[token] = (username, timestamp)
+            return JsonResponse({'token': token})
 
-            global ID
-            ID = user.id
-            return JsonResponse({'id': ID})
-
-        except:
-            return JsonResponse({'id': 0})
+        except Exception as e:
+            return JsonResponse({'message': "login failed"})
 
 
 @method_decorator(csrf_exempt, name='dispatch')
 class logout(View):
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
-        global ID
-        ID = 0
+        data = json.loads(request.body.decode('utf-8'))
+        token = data['token']
+
+        global IDs
+
+        IDs.remove(token)
         return JsonResponse({'message': 'logout'})
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class check(View):
-    def get(self, request, *args, **kwargs):
-        global ID
-        return JsonResponse({'id': ID})
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body.decode('utf-8'))
+        token = data['token']
+
+        global IDs
+        username = IDs.get(token, 0)[0]
+        user_id = 0
+        if username != 0 and datetime.datetime.utcnow() < IDs.get(token, 0)[1]:
+            user_id = person.objects.get(username=username).id
+        return JsonResponse({'id': user_id})
 
 
 @method_decorator(csrf_exempt, name='dispatch')
 class follow(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body.decode('utf-8'))
-        global ID
-        follower = ID
+        token = data['token']
+        global IDs
+        username = IDs.get(token, 0)[0]
+        follower = person.objects.get(username=username).id
         user = data['user']
+
         if Follower.objects.filter(follower=follower, user=user).first():
             delete_follower = Follower.objects.get(follower=follower, user=user)
             delete_follower.delete()
             return JsonResponse({'message': 'Unfollowed'})
         else:
-            new_follower = Follower.objects.create(follower=follower , user=user)
+            new_follower = Follower.objects.create(follower=follower, user=user)
             new_follower.save()
             return JsonResponse({'message': 'followed'})
 
+
+@method_decorator(csrf_exempt, name='dispatch')
+class search(View):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body.decode('utf-8'))
+        searched_username = data['search']
+        persons = person.objects.filter(username__icontains=searched_username)
+        if persons:
+            data_list = []
+            for data_obj in persons:
+                data_dict_ = {'id': data_obj.id, 'username': data_obj.username, 'profile': str(data_obj.profile_img)}
+                data_list.append(data_dict_)
+
+            random.shuffle(data_list)
+            return JsonResponse(data_list, safe=False)
+        else:
+            # Handle the case when no post is found for the given owner
+            return JsonResponse({'message': "No user found."})
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class recom(View):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body.decode('utf-8'))
+        person_id = data['id']
+        user_following = Follower.objects.filter(follower=person_id)
+        rec = []
+        for obj in user_following:
+            users = Follower.objects.filter(follower=obj.user).exclude(user=person_id)
+            dics = []
+            for user in users:
+                if user not in user_following:
+                    user = person.objects.get(id=user.user)
+                    dics.append({'user': user.username, 'id': user.id, 'imgOwner': str(user.profile_img)})
+                if dics:
+                    rec.append(*dics)
+
+        random_items = []
+        for i in range(min(5, len(rec))):
+            random_item = random.choice(rec)
+            random_items.append(random_item)
+
+        return JsonResponse(random_items, safe=False)

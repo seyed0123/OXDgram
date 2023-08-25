@@ -73,7 +73,6 @@ class home_post(View):
                     user = person.objects.get(id=data_obj.owner)
                     data_dict['img'] = str(data_dict['img'])
                     data_dict['owner_id'] = user.id
-                    data_dict['owner_username'] = user.username
                     data_dict['profile'] = str(user.profile_img)
                     data_list.append(data_dict)
 

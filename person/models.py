@@ -1,9 +1,12 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 # Create your models here.
 class person(models.Model):
-    username = models.CharField(max_length=15, null=False, unique=True)
+    username = models.CharField(max_length=100, unique=True, default='test')
     boi = models.TextField(blank=True)
     name = models.CharField(max_length=20, default='')
     profile_img = models.ImageField(upload_to='profile', default='default-profile.jpg')
@@ -11,16 +14,7 @@ class person(models.Model):
     password = models.CharField(max_length=15)
     email = models.EmailField()
     can_follow = models.BooleanField()
-    can_comment = models.BooleanField()
     can_search = models.BooleanField()
-    last_login = models.DateTimeField('last login', null=True, blank=True)
-
-    # Add the new fields
-    is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
-
-    # Specify the username field
-    USERNAME_FIELD = 'username'
 
 
 class Follower(models.Model):
