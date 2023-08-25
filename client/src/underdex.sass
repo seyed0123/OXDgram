@@ -1,0 +1,40 @@
+=transition($transition)
+  -webkit-transition: $transition
+  -moz-transition: $transition
+  -ms-transition: $transition
+  -o-transition: $transition
+  transition: $transition
+
+#arrow
+  +transition(border .2s linear)
+
+  text-decoration: none
+  line-height: 0
+  margin-top: -100px
+  font-size: 40px
+  position: absolute
+  height: 0
+  right: 0
+  top: 50%
+
+  border-bottom: 100px solid transparent
+  border-top: 100px solid transparent
+
+  border-right: 150px solid #0AF
+
+  > span
+    +transition(margin .1s linear)
+
+    font-family: "Open Sans", "Courier New", Courier, monospace
+    line-height: 0
+    margin-left: 65px
+    margin-top: -1px
+    position: absolute
+    display: block
+    color: white
+    height: 0
+
+  &:hover
+    border-right-color: #333
+    > span
+      margin-left: 75px

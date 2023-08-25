@@ -26,8 +26,8 @@ class Create extends React.Component<Props>{
             alert('Password and confirm password do not match');
             return;
         }
-
-        axios.post('http://localhost:8000/person/create', this.state)
+        console.log(this.state)
+        axios.post('http://localhost:8000/person/create/', this.state)
             .then(response => {
                 console.log(response.data);
                 alert(response.data.message)
@@ -46,7 +46,8 @@ class Create extends React.Component<Props>{
     render() {
         return (
             <div className={'sing_in_wrapper create_wrapper'}>
-                <div className={'sign_in'}>
+                <h1 className={'butter'}>OXDgram</h1>
+                <div className={'sign_in create'}>
                     <h1 className={'fancy'}>Create</h1>
                     <form onSubmit={this.handleSubmit} className={'sign_in'}>
                         <input className={'input'} type={'text'} name="username" placeholder={'username'} onChange={this.handleChange} />
@@ -57,7 +58,7 @@ class Create extends React.Component<Props>{
                     </form>
 
                     <h2>OR</h2>
-                    <div className="container">
+                    <div className="text_container">
                         <h1 className={'multi_color'} onClick={this.handleLoginClick}>Login</h1>
                     </div>
                 </div>

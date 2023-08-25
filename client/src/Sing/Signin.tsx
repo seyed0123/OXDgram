@@ -22,9 +22,11 @@ class SignIn extends React.Component<SignInProps>{
 
         axios.post('http://localhost:8000/person/login', this.state)
             .then(response => {
+                console.log(response)
                 if (response.data.message !== undefined)
                     alert(response.data.message)
                 else
+                    localStorage.setItem('token', response.data.token);
                     window.location.reload()
             })
             .catch(error => {
@@ -50,8 +52,8 @@ class SignIn extends React.Component<SignInProps>{
                     </div>
                     <button className={'profile_follow'} onClick={this.handleSubmit}>login</button>
                     <h2>OR</h2>
-                    <div className="container">
-                        <h1 className={'multi_color'} onClick={this.handleCreateClick}>create account</h1>
+                    <div className="text_container">
+                        <p className={'multi_color'} onClick={this.handleCreateClick}>Sign_up</p>
                     </div>
                 </div>
             </div>

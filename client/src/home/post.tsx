@@ -27,7 +27,6 @@ class Posts extends React.Component<info> {
             .get(url)
             .then((response) => {
                 const userData = response.data;
-                console.log(userData.message);
                 if (userData.message === 'No posts found for the owner.') {
                     alert(userData.message);
                 } else {
@@ -72,7 +71,6 @@ class Posts extends React.Component<info> {
 
 class Post extends React.Component<PostInter> {
     render() {
-        console.log(this.props);
         return (
             <div className="box">
                 <div className="parent">

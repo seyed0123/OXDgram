@@ -9,7 +9,13 @@ interface Props extends RouteComponentProps {
 class Setting extends React.Component<Props>{
     logout(){
         let url :string= 'http://localhost:8000/person/logout/'
-        axios.post(url)
+        axios.post(url,{token:localStorage.getItem('token')}).then(response => {
+            localStorage.setItem('token', '');
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
     }
     render() {
         return (

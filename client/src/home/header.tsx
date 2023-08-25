@@ -6,16 +6,25 @@ interface headerProps{
         path:string;
         username:string;
         id:number;
+        search:any;
     };
 }
 class Header extends React.Component<headerProps>{
+    state={
+        username:''
+    }
+    constructor(props:headerProps) {
+        super(props);
+    }
+    handleSearch = () => {
+        this.props.content.search(this.state.username);
+    }
     render() {
-        console.log(this.props.content.path)
         return (
             <header>
                 <div  id='header'>
-                        <input className={'input'} type={'text'} placeholder={'username'}/>
-                    <button type={'submit'} className={'buttons'}>search</button>
+                        <input name={'username'} className={'input'} type={'text'} placeholder={'username'} onChange={e => this.setState({ username: e.target.value })} value={this.state.username}/>
+                    <button  className={'buttons'} onClick={this.handleSearch}>search</button>
                         <Link to={`/profile/${this.props.content.id}`}>
                             <img src={this.props.content.path} className={'img-rounded profile_img'} width='7%' alt={'profile'}/>
                         </Link>

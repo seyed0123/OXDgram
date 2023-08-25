@@ -2,10 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import './home/img1.jpg'
-// import './assets/css/icons.css'
-// import './assets/css/tailwind.css'
-// import './assets/css/style.css'
-// import './assets/css/uikit.css'
+import './underdex.css'
+import './ondex.css'
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';

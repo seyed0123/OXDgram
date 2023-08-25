@@ -34,7 +34,6 @@ class Basic extends React.Component<info>{
         axios.get(url)
             .then(response => {
                 const userData = response.data;
-
                 this.setState({
                     id: userData.id,
                     username: userData.username,
@@ -82,7 +81,6 @@ class Basic extends React.Component<info>{
         formData.append('user_id', String(this.state.id));
         formData.append('profile_img', event.target.files[0]);
 
-        console.log(event.target.files[0])
         axios.post('http://localhost:8000/person/profile', formData)
             .then((response) => {
                 alert(response.data.message);

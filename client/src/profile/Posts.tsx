@@ -15,7 +15,7 @@ class Posts extends React.Component<posts>{
             return <Post img={element.img} text={element.text} key={element.id}/>
         });
         return (
-            <div className={'profile_post_wrapper'}>
+            <div className={'container'}>
                 {jxs}
             </div>
         );
@@ -26,9 +26,13 @@ class Post extends React.Component<post>
 {
     render() {
         return (
-            <div className={'profile_post_container'}>
-                <img src={this.props.img} className={'profile_post_img'} width={'30%'}/>
-                <p className={'profile_post_text'}>{this.props.text}</p>
+            <div className={'box'}>
+                <div className={'imgBx'}>
+                    <img src={this.props.img} className={'profile_post_img'} width={'30%'}/>
+                </div>
+                <div className={'content'}>
+                    <p>{this.props.text}</p>
+                </div>
             </div>
         );
     }

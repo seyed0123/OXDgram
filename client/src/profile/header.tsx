@@ -52,6 +52,16 @@ class Header extends React.Component<info>{
                     banner: 'http://localhost:8000/media/'+userData.banner_img,
                     follow: userData.follower_num,
                     following:userData.following_num,
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        axios.post('http://localhost:8000/person/is_follow/',{token:localStorage.getItem('token') ,person_id:this.props.id})
+            .then(response => {
+                const userData = response.data;
+
+                this.setState({
                     isFollow:userData.following? 1 : 0 ,
                     loading :false
                 });
@@ -64,6 +74,7 @@ class Header extends React.Component<info>{
         event.preventDefault();
         let form = {
             user:this.state.id,
+            token:localStorage.getItem('token')
         }
         axios.post('http://localhost:8000/person/follow/', form)
             .then(response => {

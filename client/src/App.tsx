@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route ,Switch } from 'react-router-dom';
 import Home from "./home/home";
 import Profile from "./profile/profile";
 import Setting from "./setting/setting";
@@ -17,16 +17,18 @@ class App extends React.Component {
   }
   getId(){
       let url :string= 'http://localhost:8000/person/check/'
-      axios.get(url)
+      let token = localStorage.getItem('token');
+      axios.post(url , {token:token})
           .then(response => {
               const userData = response.data;
-              console.log(userData)
               this.setState({
                   id: userData.id,
               });
           })
           .catch(error => {
-              console.error('Error:', error);
+              this.setState({
+                  id: 0,
+              });
           });
   }
     componentDidMount() {
@@ -34,9 +36,13 @@ class App extends React.Component {
     }
 
     render() {
+      console.log(this.state.id)
     return (
         this.state.id === 0 ? <Router>
-                <Route render={(props) => <SignIn {...props}  />}/>
+            <Switch>
+                <Route path="/create"  render={(props) => <Create {...props}  />}/>
+                <Route path='/'  render={(props) => <SignIn {...props}  />}/>
+            </Switch>
             </Router>:
         <Router>
             <Route path="/" exact  render={(props) => <Home {...props} id={this.state.id}/> }/>
