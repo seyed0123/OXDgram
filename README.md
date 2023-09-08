@@ -68,7 +68,7 @@ List the major frameworks and libraries that you used to build your application.
 ![](shots/post.views.png)
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## screen shots
 ### server
