@@ -38,7 +38,8 @@ class Create(View):
 
         hashed_password = make_password(password)
 
-        person_ = person.objects.create(username=username, email=email, password=hashed_password, boi='', can_follow=True,
+        person_ = person.objects.create(username=username, email=email, password=hashed_password, boi='',
+                                        can_follow=True,
                                         can_search=True)
         person_.save()
         return JsonResponse({'message': 'Data saved successfully'})
@@ -102,6 +103,7 @@ class setting(View):
         except person.DoesNotExist:
 
             return JsonResponse({'message': "Person with the given ID does not exist"})
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class is_follow(View):
@@ -182,22 +184,25 @@ class logout(View):
 
         global IDs
 
-        IDs.remove(token)
+        del IDs[token]
         return JsonResponse({'message': 'logout'})
 
 
 @method_decorator(csrf_exempt, name='dispatch')
 class check(View):
     def post(self, request, *args, **kwargs):
-        data = json.loads(request.body.decode('utf-8'))
-        token = data['token']
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            token = data['token']
 
-        global IDs
-        username = IDs.get(token, 0)[0]
-        user_id = 0
-        if username != 0 and datetime.datetime.utcnow() < IDs.get(token, 0)[1]:
-            user_id = person.objects.get(username=username).id
-        return JsonResponse({'id': user_id})
+            global IDs
+            username = IDs.get(token, 0)[0]
+            user_id = 0
+            if username != 0 and datetime.datetime.utcnow() < IDs.get(token, 0)[1]:
+                user_id = person.objects.get(username=username).id
+            return JsonResponse({'id': user_id})
+        except :
+            return JsonResponse({'id': 0})
 
 
 @method_decorator(csrf_exempt, name='dispatch')
