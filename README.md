@@ -14,8 +14,8 @@ The Social Media Website is designed with a focus on user interaction. It offers
 
 The backend of the application is handled by Django, which takes care of user authentication, data management, and server-side logic. Django's "batteries included" philosophy provides almost everything developers might want to do "out of the box", making it a robust choice for the backend of our application.
 
-The frontend of the application is built using React. With its component-based architecture, React allows us to create a highly interactive and responsive user interface. By handling the view layer of our application, React ensures a seamless user experience techiediaries.com.
-<div align="center"><img src="shots/video.gif"/></div>
+The front end of the application is built using React. With its component-based architecture, React allows us to create a highly interactive and responsive user interface. By handling the view layer of our application, React ensures a seamless user experience.
+<div align="center">wait for the demo to loading<img src="shots/video.gif"/></div>
 
 ## Key Features
 - User Registration and Authentication: Users can create a new account and log in to the application. Django's built-in authentication system is used to handle user registration and authentication.
@@ -70,7 +70,7 @@ List the major frameworks and libraries that you used to build your application.
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
-## screen shots
+## screenshots
 ### server
 ![](shots/server.png)
 ### login
